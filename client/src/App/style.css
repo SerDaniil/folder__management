@@ -1,0 +1,142 @@
+.header {
+  width: 100%;
+  position: absolute;
+  color: rgb(192, 192, 192);
+  /* overflow: hidden; */
+  align-items: start;
+
+  & a {
+    color: rgb(192, 192, 192);
+    text-decoration: none;
+  }
+}
+
+.header.extended {
+  background-color: rgb(22, 22, 23);
+  transition: height 0.5s ease-out, background-color 0.5s ease;
+  color: rgb(220, 220, 220);
+
+  & .underline {
+    background-color: rgb(255, 255, 255);
+    transition: width 0.4s ease, left 0.3s ease-in-out,
+      background-color 0.3s ease;
+  }
+
+  .navbar__link a {
+    color: rgb(220, 220, 220);
+  }
+}
+
+.header:not(.extended) {
+  transition: height 0.5s ease-out;
+}
+
+.header__content {
+  font-family: "MyFont", sans-serif;
+  height: 45px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 24px;
+}
+
+.header__navbar {
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  justify-content: space-between;
+  display: flex;
+  list-style-type: none;
+  width: 550px;
+}
+
+.navbar__link {
+  padding: 0px 10px;
+  text-decoration: none;
+  position: relative;
+
+  & p {
+    margin: 0px;
+  }
+}
+
+.underline {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  height: 2px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.header__expandedContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header.extended .header__expandedContent.show {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.header__expandedContent:not(.show) {
+  opacity: 0;
+}
+
+.expandedContent__services,
+.expandedContent__portfolio,
+.expandedContent__info {
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.expandedContent__container {
+  font-size: 24px;
+  font-weight: 500;
+  align-items: start;
+
+  & a {
+    color: rgb(220, 220, 220);
+  }
+
+  & a:hover {
+    border-bottom: 1px solid white;
+  }
+}
+
+.services__content {
+  display: grid;
+  grid-template-rows: repeat(4, 35px);
+  grid-auto-flow: column;
+  grid-column-gap: 20px;
+}
+
+.services__descripton {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header.extended .services__descripton.show {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.services__descripton:not(.show) {
+  opacity: 0;
+}
+
+.expandedContent__info {
+  width: 600px;
+
+  & p {
+    margin: 0;
+  }
+
+  & p br {
+    display: block;
+    content: "";
+    margin-top: 10px;
+  }
+}
