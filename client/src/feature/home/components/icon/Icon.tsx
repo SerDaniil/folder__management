@@ -1,37 +1,60 @@
 import { FC } from "react";
 import cn from "classnames";
-import { File, FolderClose, FolderOpen, Js, TSX } from "public/icons";
-import styles from "./styles.css";
+import {
+  File,
+  FolderClose,
+  FolderOpen,
+  JS,
+  JSON,
+  TSX,
+  CSS,
+} from "public/icons";
+import styles from "./styles.module.css";
 
-export type IconName = "file" | "folder-close" | "folder-open" | "js" | "tsx";
-type IconSize = "sm" | "md";
+export type IconName =
+  | "file"
+  | "folder-close"
+  | "folder-open"
+  | "js"
+  | "json"
+  | "tsx"
+  | "css";
 
 export const icons: Record<IconName, FC> = {
   file: File,
   "folder-close": FolderClose,
   "folder-open": FolderOpen,
-  js: Js,
+  js: JS,
+  json: JSON,
   tsx: TSX,
+  css: CSS,
 };
 
-console.log(styles);
+export type TypeIconSize = "Small" | "Medium" | "Large";
 
-const iconSizes: Record<IconSize, string> = {
-  sm: styles.sm,
-  md: styles.md,
-};
+interface IconSizes {
+  value: string;
+  label: TypeIconSize;
+}
+
+export const iconSizes: IconSizes[] = [
+  { value: styles.sm, label: "Small" },
+  { value: styles.md, label: "Medium" },
+  { value: styles.lr, label: "Large" },
+];
 
 interface IconProps {
   name: IconName;
-  size?: IconSize;
+  size?: TypeIconSize;
   className?: string;
 }
 
-export const Icon: FC<IconProps> = ({ name, size = "sm", className }) => {
+export const Icon: FC<IconProps> = ({ name, size, className }) => {
   const IconComponent = icons[name];
+  const { value } = iconSizes.find((item) => item.label === size);
 
   return IconComponent ? (
-    <span className={cn(styles.icon, iconSizes[size], className)}>
+    <span className={cn(styles.icon, value, className)}>
       <IconComponent />
     </span>
   ) : null;

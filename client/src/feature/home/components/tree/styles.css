@@ -1,33 +1,36 @@
-.Tree {
+:root {
+  --tree-component-color: #e6e6e6;
+  --folder-line-color: #c7c7c7;
+}
+
+.tree__component {
   display: flex;
-  color: black;
-  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+
+  & button {
+    border: none;
+    background: none;
+    color: var(--tree-component-color);
+  }
 }
 
-.treeButton {
-  border: none;
-  background: none;
-  color: black;
-  background-color: blanchedalmond;
+.tree__expanded {
+  position: relative;
 }
 
-.treeButton {
-  border: none;
-  background: none;
-  color: black;
-  background-color: blanchedalmond;
+.home__tree:hover {
+  .tree__expanded::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10px;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--folder-line-color);
+  }
 }
 
-.treeButton {
-  border: none;
-  background: none;
-  color: black;
-  background-color: blanchedalmond;
-}
-
-.treeButton {
-  border: none;
-  background: none;
-  color: black;
-  background-color: blanchedalmond;
+.tree__expanded > * {
+  margin-left: 30px;
 }

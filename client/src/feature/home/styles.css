@@ -1,0 +1,121 @@
+:root {
+  --default-color: #272829;
+  --primary-color: #e7e7e7;
+  --secondary-color: #45bfbe;
+  --setting-color: #cdd23a;
+
+  --font-size: 1.125rem;
+}
+
+html {
+  font-size: var(--font-size);
+  font-family: "Golos Text", sans-serif;
+}
+
+.home {
+  display: flex;
+  background-color: var(--default-color);
+  height: 100%;
+}
+
+.home__tree {
+  color: var(--primary-color);
+  padding: 10px 0px;
+  width: 300px;
+  border: 1px solid var(--secondary-color);
+}
+
+.tree__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--secondary-color);
+  padding: 0 5px 7px 45px;
+
+  & p {
+    margin: 0px;
+  }
+}
+
+.tree__header__setting {
+  & button {
+    border: none;
+    background: none;
+    padding: 0;
+  }
+
+  & svg {
+    cursor: pointer;
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: none;
+  }
+
+  &.active {
+    & svg {
+      animation: rotateClockwise 0.5s infinite linear;
+    }
+
+    & button {
+      pointer-events: none;
+    }
+  }
+}
+
+@keyframes rotateClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.setting__options {
+  position: absolute;
+  display: none;
+  width: 100px;
+  background-color: var(--default-color);
+  border-right: 1px solid var(--secondary-color);
+  border-top: 1px solid var(--secondary-color);
+  border-bottom: 1px solid var(--secondary-color);
+
+  &:has(button) {
+    display: block;
+  }
+
+  & button {
+    color: var(--setting-color);
+    padding: 5px;
+    margin: 5px 0px;
+    width: 100%;
+    border: none;
+    background: none;
+    border-top: 1px solid var(--secondary-color);
+    border-bottom: 1px solid var(--secondary-color);
+    cursor: pointer;
+
+    &:not(:first-child) {
+      margin: 0px;
+      border-bottom: none;
+    }
+
+    &:not(:last-child) {
+      margin: 0px;
+      border-top: none;
+    }
+
+    &:hover {
+      background-color: rgba(6, 184, 184, 0.672);
+    }
+  }
+}
+
+.tree__container {
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.home__window {
+  color: var(--primary-color);
+}
