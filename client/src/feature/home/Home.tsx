@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Tree } from "./components/tree/Tree";
-import "./style.css";
-
+import { iconSizes, TypeIconSize } from "./components/icon/Icon";
+import "./styles.css";
+import { Setting } from "public/icons";
 export interface IData {
   id: number;
   name: string;
@@ -9,9 +10,11 @@ export interface IData {
 }
 
 export default function Home(): React.JSX.Element {
-  const [showPreview, setShowPreview] = useState(false);
   const [expandedIds, setExpandedIds] = useState([]);
-  const [selectedId, setSelectedId] = useState();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedIconSize, setSelectedIconSize] = useState<TypeIconSize>(
+    iconSizes[0]?.label
+  );
 
   const data: IData[] = [
     {
@@ -82,47 +85,136 @@ export default function Home(): React.JSX.Element {
       id: 15,
       name: "tsconfig.js",
     },
+    {
+      id: 16,
+      name: "folder1",
+      children: [
+        {
+          id: 17,
+          name: "folder2",
+          children: [
+            {
+              id: 18,
+              name: "tsconfig.js",
+            },
+            {
+              id: 19,
+              name: "folder3",
+              children: [
+                {
+                  id: 20,
+                  name: "folder4",
+                  children: [],
+                },
+              ],
+            },
+            {
+              id: 21,
+              name: "styles.css",
+            },
+          ],
+        },
+        {
+          id: 22,
+          name: "index.tsx",
+        },
+      ],
+    },
   ];
+  const handleExpand = (id: number, children?: IData[]): void => {
+    const closeAllChildren = (
+      nodeIds: number[],
+      children?: IData[]
+    ): number[] => {
+      children?.forEach((child) => {
+        const index = nodeIds.indexOf(child.id);
+        if (index !== -1) {
+          nodeIds.splice(index, 1);
+        }
+        if (child.children) {
+          closeAllChildren(nodeIds, child.children);
+        }
+      });
+      return nodeIds;
+    };
 
-  // const expanded = () => {
-  //   setExpandedIds();
-  // };
+    if (expandedIds.includes(id)) {
+      let newExpandedIds = expandedIds.filter((itemId) => itemId !== id);
+      if (children) {
+        newExpandedIds = closeAllChildren(newExpandedIds, children);
+      }
+      setExpandedIds(newExpandedIds);
+    } else {
+      setExpandedIds([...expandedIds, id]);
+    }
+  };
 
-  // const selected = () => {
-  //   setSelectedId();
-  // };
+  const handleSelect = (id: number): void => {
+    setSelectedId(id);
+  };
+
+  const handleOptionClick = (label: TypeIconSize): void => {
+    setSelectedIconSize(label);
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [showSetting, setShowSetting] = useState(false);
+
+  const handleToggleOptions = () => {
+    setIsOpen(!isOpen);
+
+    setShowSetting(true);
+    const timeout = setTimeout(() => {
+      setShowSetting(false);
+    }, 600);
+
+    return () => clearTimeout(timeout);
+  };
 
   return (
     <div className="home">
-      <div className="wrapper">
-        <div className="col">
+      <div className="home__tree">
+        <div className="tree__header">
+          <p>client</p>
+          <div
+            className={`tree__header__setting ${showSetting ? "active" : ""}`}
+          >
+            <button
+              type="button"
+              className="setting__button"
+              onClick={handleToggleOptions}
+            >
+              <Setting />
+            </button>
+          </div>
+        </div>
+        <div className="tree__container">
           <Tree
             items={data}
             expandedIds={expandedIds}
             selectedId={selectedId}
-            onExpand={() => {}}
-            onSelect={() => {}}
+            onExpand={handleExpand}
+            onSelect={handleSelect}
+            IconSize={selectedIconSize}
           />
         </div>
-        {/* <div className="col">
-          <div className="icons">
-            Примеры иконок:
-            <Icon size="md" name="folder-close" />
-            <Icon size="md" name="folder-open" />
-            <Icon size="md" name="file" />
-            <Icon size="md" name="tsx" />
-            <Icon size="md" name="js" />
-          </div>
-          <div>
-            <span
-              className="preview-button"
-              onClick={() => setShowPreview(!showPreview)}
-            >
-              {showPreview ? "Скрыть превью" : "Показать превью"}
-            </span>
-          </div>
-          {showPreview && <img width={250} src="/example.gif" />}
-        </div> */}
+      </div>
+      <div className="home__window">
+        <div className="setting__options">
+          {iconSizes &&
+            isOpen &&
+            iconSizes.map(({ label }, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleOptionClick(label)}
+              >
+                {label}
+              </button>
+            ))}
+        </div>
+        {selectedId && selectedId}
       </div>
     </div>
   );

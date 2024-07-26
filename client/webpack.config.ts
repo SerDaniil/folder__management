@@ -64,7 +64,7 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
+        test: /\.module.css$/,
         use: [
           "style-loader",
           {
@@ -74,6 +74,11 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.css$/,
+        exclude: /\.module\.css$/,
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,

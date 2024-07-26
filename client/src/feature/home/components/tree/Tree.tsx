@@ -1,14 +1,15 @@
-import type { FC } from "react";
-import { Icon, IconName, icons } from "../icon/Icon";
+import { type FC } from "react";
+import { Icon, IconName, icons, TypeIconSize } from "../icon/Icon";
 import { IData } from "../../Home";
-// import styles from "./styles.css";
+import "./styles.css";
 
 interface TreeProps {
   items: IData[];
-  expandedIds: IData[];
-  selectedId: any;
-  onSelect: (args: any) => void;
-  onExpand: (args: any) => void;
+  expandedIds: number[];
+  selectedId: number;
+  onSelect: (id: number) => void;
+  onExpand: (id: number, children?: IData[]) => void;
+  IconSize: TypeIconSize;
 }
 
 export const Tree: FC<TreeProps> = ({
@@ -17,39 +18,73 @@ export const Tree: FC<TreeProps> = ({
   selectedId,
   onSelect,
   onExpand,
+  IconSize,
 }) => {
-  function openClose(id: number): void {
+  function handleExpanded(id: number, children?: IData[]): void {
+    onExpand(id, children);
+  }
+
+  function handleSelected(id: number): void {
     onSelect(id);
   }
 
-  function toIconName(name: string): IconName {
+  function toIconName({ name, id, children }: IData): IconName {
     const extension = name.split(".")[1];
-    const result =
-      (extension || "folder-close") in icons
-        ? ((extension || "folder-close") as IconName)
-        : "file";
+    const isFolder = !!children;
+    const result = isFolder
+      ? expandedIds.includes(id)
+        ? "folder-open"
+        : "folder-close"
+      : extension in icons
+      ? (extension as IconName)
+      : "file";
 
     return result;
   }
 
-  // console.log(styles);
-
   return (
-    <div>
+    <>
       {items.length &&
-        items.map(({ name, id }) => (
+        items.map(({ name, id, children }) => (
           <div key={id}>
-            <button
-              type="button"
-              onClick={() => {
-                openClose(id);
-              }}
-            >
-              <Icon name={toIconName(name)} size="md" />
-            </button>
-            {name}
+            <div className="tree__component">
+              <button
+                type="button"
+                onClick={() => {
+                  if (children) {
+                    handleExpanded(id, children);
+                  }
+                }}
+              >
+                <Icon
+                  name={toIconName({ name, id, children })}
+                  size={IconSize}
+                />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleSelected(id);
+                }}
+              >
+                {name}
+              </button>
+            </div>
+
+            {expandedIds.includes(id) && children && children.length > 0 && (
+              <div className="tree__expanded">
+                <Tree
+                  items={children}
+                  expandedIds={expandedIds}
+                  selectedId={selectedId}
+                  onSelect={onSelect}
+                  onExpand={onExpand}
+                  IconSize={IconSize}
+                />
+              </div>
+            )}
           </div>
         ))}
-    </div>
+    </>
   );
 };
